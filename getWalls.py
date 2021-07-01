@@ -251,8 +251,7 @@ print()
 for post in posts:
 
     # Define and cleanup title for use as file name    
-    title = post['data']['title']
-    title = title + "_" + post['data']['name'] 
+    title = post['data']['title'] + "_" + post['data']['name'] 
     title = stylizeFileName(title)
     title = title + right(post['data']['url'],4)
 
