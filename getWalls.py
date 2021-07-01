@@ -39,6 +39,7 @@ loops = 5
 # ---------------------
 import os
 from os.path import expanduser
+from sanitize_filename import sanitize
 import sys
 import requests
 import urllib
@@ -165,6 +166,33 @@ def storeImg(post,title):
 def right(s, amount):
     return s[-amount:]
 
+def left(s, amount):
+    return s[:amount]
+
+def stylizeFileName(title):
+    title = sanitize(title)
+    title = title.lower()
+    title = title.replace(" ","_")
+    title = title.replace("-","_")
+    title = title.replace("/","")
+    title = title.replace("!","")
+    title = title.replace("#","")
+    title = title.replace("%","")
+    title = title.replace("&","")
+    title = title.replace("'","")
+    title = title.replace(",","")
+    title = title.replace(">","")
+    title = title.replace("<","")
+    title = title.replace(".","")
+    title = title.replace("[","(")
+    title = title.replace("]",")")
+    title = title.replace("_×_","x")
+    title = title.replace("_x_","x")
+    title = title.replace("_X_","x")
+    title = title.replace("__","_")
+    return title
+
+
 # ---------------------
 # COLORS --------------
 # ---------------------
@@ -224,13 +252,10 @@ for post in posts:
 
     # Define and cleanup title for use as file name    
     title = post['data']['title']
-    title = title.lower()
-    title = title.replace(" ","_")
-    title = title.replace("/","")
-    title = title.replace(",","")
-    title = title.replace(">","")
-    title = title.replace("<","")
-    title = title + "_" + post['data']['name'] + right(post['data']['url'],4)
+    title = title + "_" + post['data']['name'] 
+    title = stylizeFileName(title)
+    title = title + right(post['data']['url'],4)
+
 #### uncomment to print during debug
 #    print(title)
     # Shortening variable name
