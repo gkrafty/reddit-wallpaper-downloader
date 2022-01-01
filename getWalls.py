@@ -59,12 +59,12 @@ def verifySubreddit(subreddit):
         return True
 
 # Returns list of posts from subreddit as json
-def getPosts(subreddit, loops, jsonLimit, after):
+def getPosts(subreddit, sort, loops, jsonLimit, after):
     allPosts = []
     
     i = 0
     while i < loops:
-        URL = 'https://reddit.com/r/{}/top/.json?t=all&limit={}&after={}'.format(subreddit, jsonLimit, after)
+        URL = 'https://reddit.com/r/{}/{}/.json?t=all&limit={}&after={}'.format(args.subreddit[0], args.sort, str(args.limit), after)
         posts = requests.get(URL, headers = {'User-agent':'getWallpapers'}).json()
         # allPosts.append(posts['data']['children'])
         for post in posts['data']['children']:
