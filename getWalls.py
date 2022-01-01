@@ -81,7 +81,7 @@ def isImg(URL):
     else: return False
 
 # Returns false if image from URL is not HD (Specified by min-/max_width)
-def isHD(URL, min_widht, min_height):
+def isHD(URL, min_width, min_height):
     file = urllib.request.urlopen(URL)
     size = file.headers.get("content-length")
     if size: size = int(size)
