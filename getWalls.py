@@ -328,8 +328,7 @@ def main():
             continue
         
         # Skip post if not HD
-        elif not isHD(post, args.minimal_width, args.minimal_
-        height):
+        elif not isHD(post, args.minimal_width, args.minimal_height):
             print(RED + '{}) Skipping low resolution image'.format(index) + NC)
             index += 1
             continue
