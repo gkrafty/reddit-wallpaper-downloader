@@ -349,7 +349,7 @@ def main():
             continue
 
         # Skip post if not landscape
-        elif not isOriented(post,required_orientation):
+        elif not isOriented(post,args.orientation):
             print(RED + '{}) Skipping wrong orientation'.format(index) + NC)
             index += 1
             continue
