@@ -216,7 +216,7 @@ def main():
     parser.add_argument("-d", "--directory", type=str, nargs = '?',
                         metavar='output-directory', const = 'none', default = directory,
                         help = "Specify directory location to store wallpapers \
-                        default = '~/Pictures/Wallpaper/")
+                        default = '~/Pictures/Wallpaper/Reddit/")
 
     parser.add_argument("-s", "--subreddit", metavar='subreddit', type=str, nargs=1,
                         default = subreddit,
@@ -254,9 +254,13 @@ def main():
         pass
 
     # Creates directory
+    print("args.directory[0] = " + args.directory[0])
     directory = expanduser(args.directory[0])
+    print("fist directory = " + directory)
     directory = os.path.join(directory, subreddit)
+    print("second directory = " + directory)
     prepareDirectory(directory)
+    print("prepared directory = " + directory)
 
     # Exits if invalid subreddit name
     if not verifySubreddit(subreddit):
