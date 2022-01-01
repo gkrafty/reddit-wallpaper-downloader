@@ -125,7 +125,7 @@ def isLandscape(URL):
     return False
 
 # Returns true if image from URL is already downloaded
-def alreadyDownloaded(URL,title):
+def alreadyDownloaded(URL,title,directory):
     imgName = os.path.basename(URL)
     imgName = title
     localFilePath = os.path.join(directory, imgName)
@@ -334,7 +334,7 @@ def main():
             continue
 
         # Skip already downloaded images
-        elif alreadyDownloaded(post,title):
+        elif alreadyDownloaded(post,title,directory):
             print(RED + '{}) Skipping already downloaded image'.format(index) + NC)
             index += 1
             continue
