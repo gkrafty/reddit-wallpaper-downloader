@@ -337,6 +337,7 @@ def main():
 
         # Skip already downloaded images
         elif alreadyDownloaded(post,title,directory):
+            print(directory)
             print(RED + '{}) Skipping already downloaded image'.format(index) + NC)
             index += 1
             continue
