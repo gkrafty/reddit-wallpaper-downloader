@@ -256,8 +256,8 @@ def main():
     # Creates directory
     print("args.directory[0] = " + args.directory)
     directory = expanduser(args.directory)
-    print("fist directory = " + directory)
-    directory = os.path.join(args.directory, subreddit)
+    print("first directory = " + directory)
+    directory = os.path.join(directory, subreddit)
     print("second directory = " + directory)
     prepareDirectory(directory)
     print("prepared directory = " + directory)
