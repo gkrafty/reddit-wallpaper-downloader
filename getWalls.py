@@ -235,7 +235,7 @@ def main():
                         metavar = ('minimum height'),
                         help = "Minium height in pixels.")
     
-        parser.add_argument("-jl", "--json-limit", type = int, nargs = '?',
+    parser.add_argument("-jl", "--json-limit", type = int, nargs = '?',
                         default = jsonLimit,
                         metavar = ('post limit'),
                         help = "number of posts to scan through. \
