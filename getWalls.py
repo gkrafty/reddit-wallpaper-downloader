@@ -217,8 +217,9 @@ def main():
   
     # defining arguments for parser object
     parser.add_argument("-d", "--directory", type=str, nargs = '?',
-                        metavar='output-directory', const = 'none', default = "black",
-                        help = "Specify directory location to store wallpapers")
+                        metavar='output-directory', const = 'none', default = directory,
+                        help = "Specify directory location to store wallpapers \
+                        default = '~/Pictures/Wallpaper/")
 
     parser.add_argument("-s", "--subreddit", metavar='subreddit', type=str, nargs=1,
                         help = "Subreddit to troll through")
