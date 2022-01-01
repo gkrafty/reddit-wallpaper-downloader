@@ -224,17 +224,17 @@ def main():
 
     parser.add_argument("-mw", "--minimal-width", type = int, nargs = '?',
                         default = min_width,
-                        metavar = ('minimum width'),
+                        metavar = ('minimum-width'),
                         help = "Minium width in pixels.")
 
     parser.add_argument("-mh", "--minimal-height", type = int, nargs = '?',
                         default = min_height,
-                        metavar = ('minimum height'),
+                        metavar = ('minimal-height'),
                         help = "Minium height in pixels.")
 
     parser.add_argument("-st", "--sort", type = str, nargs = '?',
                         default = sort_type,
-                        metavar = ('minimum height'),
+                        metavar = ('sort'),
                         help = "Minium height in pixels.")
 
     parser.add_argument("-l", "--jsonLimit", type = int, nargs = '?',
