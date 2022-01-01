@@ -267,7 +267,7 @@ def main():
     after = ''
 
     # Stores posts from function
-    posts = getPosts(subreddit, args.sort, loops, str(args.jsonlimit), after)
+    posts = getPosts(subreddit, args.sort, loops, str(args.jsonLimit), after)
 
     # For adding index numbers to loop
     index = 1
