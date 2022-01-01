@@ -59,12 +59,12 @@ def verifySubreddit(subreddit):
         return True
 
 # Returns list of posts from subreddit as json
-def getPosts(subreddit, sort, loops, jsonLimit, after):
+def getPosts(subreddit, sort, time, loops, jsonLimit, after):
     allPosts = []
     
     i = 0
     while i < loops:
-        URL = 'https://reddit.com/r/{}/{}/.json?t=all&limit={}&after={}'.format(subreddit, sort, jsonLimit, after)
+        URL = 'https://reddit.com/r/{}/{}/.json?t={}&limit={}&after={}'.format(subreddit, sort, time, jsonLimit, after)
         posts = requests.get(URL, headers = {'User-agent':'getWallpapers'}).json()
         # allPosts.append(posts['data']['children'])
         for post in posts['data']['children']:
@@ -242,6 +242,12 @@ def main():
                         metavar = ('post limit'),
                         help = "number of posts to scan through. \
                         default = 100")
+
+    parser.add_argument("-t", "--time", type = str, nargs = '?',
+                        default = 'all',
+                        metavar = ('time'),
+                        help = "Time bound the query \
+                        default = all.  Optional values = hour, day, week, month, year")
   
     # parse the arguments from standard input
     args = parser.parse_args()
@@ -254,13 +260,9 @@ def main():
         pass
 
     # Creates directory
-    print("args.directory[0] = " + args.directory)
     directory = expanduser(args.directory)
-    print("first directory = " + directory)
     directory = os.path.join(directory, subreddit)
-    print("second directory = " + directory)
     prepareDirectory(directory)
-    print("prepared directory = " + directory)
 
     # Exits if invalid subreddit name
     if not verifySubreddit(subreddit):
@@ -271,7 +273,7 @@ def main():
     after = ''
 
     # Stores posts from function
-    posts = getPosts(subreddit, args.sort, loops, str(args.jsonLimit), after)
+    posts = getPosts(subreddit, args.sort, args.time, loops, str(args.jsonLimit), after)
 
     # For adding index numbers to loop
     index = 1
