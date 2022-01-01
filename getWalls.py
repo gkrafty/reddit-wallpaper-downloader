@@ -126,7 +126,7 @@ def isLandscape(URL):
 
 # Returns true if image from URL is already downloaded
 def alreadyDownloaded(URL,title):
-#    imgName = os.path.basename(URL)
+    imgName = os.path.basename(URL)
     imgName = title
     localFilePath = os.path.join(directory, imgName)
     if(os.path.isfile(localFilePath)):
