@@ -21,10 +21,12 @@
 directory = '~/Pictures/Wallpapers/Reddit/'
 # Which subreddit to download from
 subreddit = 'wallpapers'
+# Sort Type
+sort_type = 'top' # options are 'top', 'hot', 'new'
 # Minimum width of image
-min_width = 1920
+min_width = 3440
 # Minimum height of image
-min_height = 1080
+min_height = 1440
 # How many posts to get for each request (Max 100)
 jsonLimit = 100
 # Increase this number if the number above (jsonLimit) isn't enough posts
@@ -38,9 +40,10 @@ loops = 5
 # IMPORTS -------------
 # ---------------------
 import os
+import sys
+import argparse
 from os.path import expanduser
 from sanitize_filename import sanitize
-import sys
 import requests
 import urllib
 from PIL import ImageFile
@@ -74,7 +77,7 @@ def verifySubreddit(subreddit):
         return True
 
 # Returns list of posts from subreddit as json
-def getPosts(subreddit, loops, after):
+def getPosts(subreddit, loops, jsonLimit, after):
     allPosts = []
     
     i = 0
@@ -205,110 +208,151 @@ NC = '\033[0m'
 
 
 # ---------------------
+# FUNCTIONS - Main
+# ---------------------
+def main():
+
+    # create parser object
+    parser = argparse.ArgumentParser(description = "An background image processor!")
+  
+    # defining arguments for parser object
+    parser.add_argument("-d", "--directory", type=str, nargs = '?',
+                        metavar='output-directory', const = 'none', default = "black",
+                        help = "Specify directory location to store wallpapers")
+
+    parser.add_argument("-s", "--subreddit", metavar='subreddit', type=str, nargs=1,
+                        help = "Subreddit to troll through")
+
+    parser.add_argument("-mw", "--minimal-width", type = int, nargs = '?',
+                        metavar = ('minimum width'),
+                        help = "Minium width in pixels.")
+
+    parser.add_argument("-mh", "--minimal-height", type = int, nargs = '?',
+                        metavar = ('minimum height'),
+                        help = "Minium height in pixels.")
+
+    parser.add_argument("-st", "--sort", type = int, nargs = '?',
+                        metavar = ('minimum height'),
+                        help = "Minium height in pixels.")
+    
+        parser.add_argument("-jl", "--json-limit", type = int, nargs = '?',
+                        default = jsonLimit,
+                        metavar = ('post limit'),
+                        help = "number of posts to scan through. \
+                        default = 100")
+  
+    # parse the arguments from standard input
+    args = parser.parse_args()
+
+
+    # Check if subreddit name is specified as parameter
+    try:
+        subreddit = args.subreddit[0]
+    except:
+        pass
+
+    # Creates directory
+    directory = expanduser(directory)
+    directory = os.path.join(directory, subreddit)
+    prepareDirectory(directory)
+
+    # Exits if invalid subreddit name
+    if not verifySubreddit(subreddit):
+        print('r/{} is not a valid subreddit'.format(subreddit))
+        sys.exit()
+
+    # For reddit pagination (Leave empty)
+    after = ''
+
+    # Stores posts from function
+    posts = getPosts(subreddit, args.sort, loops, str(args.jsonlimit), after)
+
+    # For adding index numbers to loop
+    index = 1
+
+    # Counting amount of images downloaded
+    downloadCount = 0
+
+    # Print starting message
+    print()
+    print(DARK + '--------------------------------------------' + NC)
+    print(PURPLE + 'Downloading to      : ' + ORANGE + directory + NC)
+    print(PURPLE + 'From r/             : ' + ORANGE + subreddit + NC)
+    print(PURPLE + 'Minimum resolution  : ' + ORANGE + str(min_width) + 'x' + str(min_height) + NC)
+    print(PURPLE + 'Maximum downloads   : ' + ORANGE + str(jsonLimit*loops) + NC)
+    print(DARK + '--------------------------------------------' + NC)
+    print()
+
+
+    # Loops through all posts
+    for post in posts:
+
+        # Define and cleanup title for use as file name    
+        title = post['data']['title'] + "_" + post['data']['name'] 
+        title = stylizeFileName(title)
+        title = title + right(post['data']['url'],4)
+
+    #### uncomment to print during debug
+    #    print(title)
+        # Shortening variable name
+        post = post['data']['url']
+
+        # Skip post on 404 error
+        if not validURL(post):
+            print(RED + '{}) 404 error'.format(index) + NC)
+            index += 1
+            continue
+
+        # Skip unknown URLs
+        elif not knownURL(post):
+            print(RED + '{}) Skipping unknown URL'.format(index) + NC)
+            index += 1
+            continue
+
+        # Skip post if not image
+        elif not isImg(post):
+            print(RED + '{}) No image in this post'.format(index) + NC + NC + NC + NC)
+            index += 1
+            continue
+
+        # Skip post if not landscape
+        elif not isLandscape(post):
+            print(RED + '{}) Skipping portrait image'.format(index) + NC)
+            index += 1
+            continue
+        
+        # Skip post if not HD
+        elif not isHD(post, min_width, min_height):
+            print(RED + '{}) Skipping low resolution image'.format(index) + NC)
+            index += 1
+            continue
+
+        # Skip already downloaded images
+        elif alreadyDownloaded(post,title):
+            print(RED + '{}) Skipping already downloaded image'.format(index) + NC)
+            index += 1
+            continue
+
+        # All checks cleared, download image
+        else:
+            # Store image from post locally
+            if storeImg(post,title):
+                print(GREEN + '{}) Downloaded {}'.format(index, title) + NC)
+                downloadCount += 1
+                index += 1
+            # For unexpected errors
+            else:
+                print(RED + 'Unexcepted error' + NC)
+                index += 1
+
+
+    # Print info when loop is finished
+    print()
+    print(ORANGE + '{}'.format(downloadCount) + PURPLE + ' images was downloaded to ' + ORANGE + '{}'.format(directory) + NC)
+
+# ---------------------
 # START SCRIPT --------
 # ---------------------
-
-# Check if subreddit name is specified as parameter
-try:
-    subreddit = sys.argv[1]
-except:
-    pass
-
-# Creates directory
-directory = expanduser(directory)
-directory = os.path.join(directory, subreddit)
-prepareDirectory(directory)
-
-# Exits if invalid subreddit name
-if not verifySubreddit(subreddit):
-    print('r/{} is not a valid subreddit'.format(subreddit))
-    sys.exit()
-
-# For reddit pagination (Leave empty)
-after = ''
-
-# Stores posts from function
-posts = getPosts(subreddit, loops, after)
-
-# For adding index numbers to loop
-index = 1
-
-# Counting amount of images downloaded
-downloadCount = 0
-
-# Print starting message
-print()
-print(DARK + '--------------------------------------------' + NC)
-print(PURPLE + 'Downloading to      : ' + ORANGE + directory + NC)
-print(PURPLE + 'From r/             : ' + ORANGE + subreddit + NC)
-print(PURPLE + 'Minimum resolution  : ' + ORANGE + str(min_width) + 'x' + str(min_height) + NC)
-print(PURPLE + 'Maximum downloads   : ' + ORANGE + str(jsonLimit*loops) + NC)
-print(DARK + '--------------------------------------------' + NC)
-print()
-
-
-# Loops through all posts
-for post in posts:
-
-    # Define and cleanup title for use as file name    
-    title = post['data']['title'] + "_" + post['data']['name'] 
-    title = stylizeFileName(title)
-    title = title + right(post['data']['url'],4)
-
-#### uncomment to print during debug
-#    print(title)
-    # Shortening variable name
-    post = post['data']['url']
-
-    # Skip post on 404 error
-    if not validURL(post):
-        print(RED + '{}) 404 error'.format(index) + NC)
-        index += 1
-        continue
-
-    # Skip unknown URLs
-    elif not knownURL(post):
-        print(RED + '{}) Skipping unknown URL'.format(index) + NC)
-        index += 1
-        continue
-
-    # Skip post if not image
-    elif not isImg(post):
-        print(RED + '{}) No image in this post'.format(index) + NC + NC + NC + NC)
-        index += 1
-        continue
-
-    # Skip post if not landscape
-    elif not isLandscape(post):
-        print(RED + '{}) Skipping portrait image'.format(index) + NC)
-        index += 1
-        continue
-    
-    # Skip post if not HD
-    elif not isHD(post, min_width, min_height):
-        print(RED + '{}) Skipping low resolution image'.format(index) + NC)
-        index += 1
-        continue
-
-    # Skip already downloaded images
-    elif alreadyDownloaded(post,title):
-        print(RED + '{}) Skipping already downloaded image'.format(index) + NC)
-        index += 1
-        continue
-
-    # All checks cleared, download image
-    else:
-        # Store image from post locally
-        if storeImg(post,title):
-            print(GREEN + '{}) Downloaded {}'.format(index, title) + NC)
-            downloadCount += 1
-            index += 1
-        # For unexpected errors
-        else:
-            print(RED + 'Unexcepted error' + NC)
-            index += 1
-
-
-# Print info when loop is finished
-print()
-print(ORANGE + '{}'.format(downloadCount) + PURPLE + ' images was downloaded to ' + ORANGE + '{}'.format(directory) + NC)
+if __name__ == "__main__":
+    # calling the main function
+    main()
