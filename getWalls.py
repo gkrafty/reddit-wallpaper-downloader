@@ -207,7 +207,7 @@ def main():
     # How many posts to get for each request (Max 100)
     jsonLimit = 100
     # Increase this number if the number above (jsonLimit) isn't enough posts
-    loops = 5
+    loops = 1
 
     # create parser object
     parser = argparse.ArgumentParser(description = "An background image processor!")
