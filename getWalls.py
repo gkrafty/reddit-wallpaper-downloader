@@ -140,7 +140,7 @@ def knownURL(post):
     else: return False
 
 # Returns true if image from post/URL is stored locally
-def storeImg(post,title):
+def storeImg(post,title,directory):
 #### uncomment to print for debug
 #    print(directory + title)
 #    if urllib.request.urlretrieve(post, os.path.join(directory, os.path.basename(post))):
@@ -342,7 +342,7 @@ def main():
         # All checks cleared, download image
         else:
             # Store image from post locally
-            if storeImg(post,title):
+            if storeImg(post,title,directory):
                 print(GREEN + '{}) Downloaded {}'.format(index, title) + NC)
                 downloadCount += 1
                 index += 1
