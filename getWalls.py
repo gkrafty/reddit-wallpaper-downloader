@@ -254,7 +254,7 @@ def main():
         pass
 
     # Creates directory
-    directory = expanduser(args.directory)
+    directory = expanduser(args.directory[0])
     directory = os.path.join(directory, subreddit)
     prepareDirectory(directory)
 
