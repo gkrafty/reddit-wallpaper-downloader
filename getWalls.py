@@ -17,24 +17,6 @@
 # USER CONFIG ---------
 # ---------------------
 
-# Where to store downloaded images
-directory = '~/Pictures/Wallpapers/Reddit/'
-# Which subreddit to download from
-subreddit = 'wallpapers'
-# Sort Type
-sort_type = 'top' # options are 'top', 'hot', 'new'
-# Minimum width of image
-min_width = 3440
-# Minimum height of image
-min_height = 1440
-# How many posts to get for each request (Max 100)
-jsonLimit = 100
-# Increase this number if the number above (jsonLimit) isn't enough posts
-loops = 5
-
-
-
-
 
 # ---------------------
 # IMPORTS -------------
@@ -212,31 +194,50 @@ NC = '\033[0m'
 # ---------------------
 def main():
 
+    # Where to store downloaded images
+    directory = '~/Pictures/Wallpapers/Reddit/'
+    # Which subreddit to download from
+    subreddit = 'wallpapers'
+    # Sort Type
+    sort_type = 'top' # options are 'top', 'hot', 'new'
+    # Minimum width of image
+    min_width = 3440
+    # Minimum height of image
+    min_height = 1440
+    # How many posts to get for each request (Max 100)
+    jsonLimit = 100
+    # Increase this number if the number above (jsonLimit) isn't enough posts
+    loops = 5
+
     # create parser object
     parser = argparse.ArgumentParser(description = "An background image processor!")
   
     # defining arguments for parser object
     parser.add_argument("-d", "--directory", type=str, nargs = '?',
-                        metavar='output-directory', const = 'none', default = '~/Pictures/Wallpaper/',
+                        metavar='output-directory', const = 'none', default = directory,
                         help = "Specify directory location to store wallpapers \
-                        default = ~/Pictures/Wallpaper/")
+                        default = '~/Pictures/Wallpaper/")
 
     parser.add_argument("-s", "--subreddit", metavar='subreddit', type=str, nargs=1,
+                        default = subreddit,
                         help = "Subreddit to troll through")
 
     parser.add_argument("-mw", "--minimal-width", type = int, nargs = '?',
+                        default = min_width,
                         metavar = ('minimum width'),
                         help = "Minium width in pixels.")
 
     parser.add_argument("-mh", "--minimal-height", type = int, nargs = '?',
+                        default = min_height,
                         metavar = ('minimum height'),
                         help = "Minium height in pixels.")
 
-    parser.add_argument("-st", "--sort", type = int, nargs = '?',
+    parser.add_argument("-st", "--sort", type = str, nargs = '?',
+                        default = sort_type,
                         metavar = ('minimum height'),
                         help = "Minium height in pixels.")
-    
-    parser.add_argument("-jl", "--json-limit", type = int, nargs = '?',
+
+    parser.add_argument("-l", "--limit", type = int, nargs = '?',
                         default = jsonLimit,
                         metavar = ('post limit'),
                         help = "number of posts to scan through. \
