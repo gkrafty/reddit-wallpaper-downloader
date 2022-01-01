@@ -64,7 +64,7 @@ def getPosts(subreddit, sort, loops, jsonLimit, after):
     
     i = 0
     while i < loops:
-        URL = 'https://reddit.com/r/{}/{}/.json?t=all&limit={}&after={}'.format(args.subreddit[0], args.sort, str(args.limit), after)
+        URL = 'https://reddit.com/r/{}/{}/.json?t=all&limit={}&after={}'.format(subreddit, sort, jsonLimit, after)
         posts = requests.get(URL, headers = {'User-agent':'getWallpapers'}).json()
         # allPosts.append(posts['data']['children'])
         for post in posts['data']['children']:
@@ -237,7 +237,7 @@ def main():
                         metavar = ('minimum height'),
                         help = "Minium height in pixels.")
 
-    parser.add_argument("-l", "--limit", type = int, nargs = '?',
+    parser.add_argument("-l", "--jsonLimit", type = int, nargs = '?',
                         default = jsonLimit,
                         metavar = ('post limit'),
                         help = "number of posts to scan through. \
