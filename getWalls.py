@@ -224,7 +224,7 @@ def main():
 
     parser.add_argument("-mw", "--minimal-width", type = int, nargs = '?',
                         default = min_width,
-                        metavar = ('minimum-width'),
+                        metavar = ('minimal-width'),
                         help = "Minium width in pixels.")
 
     parser.add_argument("-mh", "--minimal-height", type = int, nargs = '?',
@@ -328,7 +328,7 @@ def main():
             continue
         
         # Skip post if not HD
-        elif not isHD(post, str(args.minimal-width), str(args.minimal-height)):
+        elif not isHD(post, args.minimal-width, args.minimal-height):
             print(RED + '{}) Skipping low resolution image'.format(index) + NC)
             index += 1
             continue
