@@ -254,13 +254,13 @@ def main():
         pass
 
     # Creates directory
-    print("args.directory[0] = " + args.directory)
+    #print("args.directory[0] = " + args.directory)
     directory = expanduser(args.directory)
-    print("fist directory = " + directory)
+    #print("fist directory = " + directory)
     directory = os.path.join(args.directory, subreddit)
-    print("second directory = " + directory)
+    #print("second directory = " + directory)
     prepareDirectory(directory)
-    print("prepared directory = " + directory)
+    #print("prepared directory = " + directory)
 
     # Exits if invalid subreddit name
     if not verifySubreddit(subreddit):
@@ -328,7 +328,7 @@ def main():
             continue
         
         # Skip post if not HD
-        elif not isHD(post, min_width, min_height):
+        elif not isHD(post, args.min_widht, args.min_height):
             print(RED + '{}) Skipping low resolution image'.format(index) + NC)
             index += 1
             continue
