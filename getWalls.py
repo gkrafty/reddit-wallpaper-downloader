@@ -235,7 +235,7 @@ def main():
     parser.add_argument("-d", "--directory", type=str, nargs = '?',
                         metavar='output-directory', const = 'none', default = directory,
                         help = "Specify directory location to store wallpapers \
-                        default = '~/Pictures/Wallpapers/Reddit/")
+                        Default = '~/Pictures/Wallpapers/Reddit/")
 
     parser.add_argument("-s", "--subreddit", metavar='subreddit', type=str, nargs=1,
                         default = subreddit,
@@ -244,35 +244,38 @@ def main():
     parser.add_argument("-mw", "--minimal-width", type = int, nargs = '?',
                         default = min_width,
                         metavar = ('minimal-width'),
-                        help = "Minium width in pixels.")
+                        help = "Minium width in pixels. \
+                        Default = 3440")
 
     parser.add_argument("-mh", "--minimal-height", type = int, nargs = '?',
                         default = min_height,
                         metavar = ('minimal-height'),
-                        help = "Minium height in pixels.")
+                        help = "Minium height in pixels. \
+                        Default = 1440")
 
     parser.add_argument("-st", "--sort", type = str, nargs = '?',
                         default = sort_type,
                         metavar = ('sort'),
-                        help = "Minium height in pixels.")
+                        help = "Sorting order of the subreddit results. \
+                        Default = top.  Optional values = new, hot")
 
     parser.add_argument("-l", "--jsonLimit", type = int, nargs = '?',
                         default = jsonLimit,
                         metavar = ('post limit'),
                         help = "number of posts to scan through. \
-                        default = 100")
+                        Default = 100")
 
     parser.add_argument("-t", "--time", type = str, nargs = '?',
                         default = 'all',
                         metavar = ('time'),
-                        help = "Time bound the query \
-                        default = all.  Optional values = hour, day, week, month, year")
+                        help = "Time bound the query. \
+                        Default = all.  Optional values = hour, day, week, month, year")
     
     parser.add_argument("-o", "--orientation", type = str, nargs = '?',
-                        default = 'any',
+                        default = 'landscape',
                         metavar = ('orientation'),
                         help = "Select orientation of the image \
-                        default = any.  Optional values = portrait, landscape")
+                        Default = landscape.  Optional values = portrait, any")
   
     # parse the arguments from standard input
     args = parser.parse_args()
