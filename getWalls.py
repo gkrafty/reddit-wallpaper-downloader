@@ -216,7 +216,7 @@ def main():
     parser.add_argument("-d", "--directory", type=str, nargs = '?',
                         metavar='output-directory', const = 'none', default = directory,
                         help = "Specify directory location to store wallpapers \
-                        default = '~/Pictures/Wallpaper/Reddit/")
+                        default = '~/Pictures/Wallpapers/Reddit/")
 
     parser.add_argument("-s", "--subreddit", metavar='subreddit', type=str, nargs=1,
                         default = subreddit,
@@ -254,13 +254,13 @@ def main():
         pass
 
     # Creates directory
-    #print("args.directory[0] = " + args.directory)
+    print("args.directory[0] = " + args.directory)
     directory = expanduser(args.directory)
-    #print("fist directory = " + directory)
+    print("fist directory = " + directory)
     directory = os.path.join(args.directory, subreddit)
-    #print("second directory = " + directory)
+    print("second directory = " + directory)
     prepareDirectory(directory)
-    #print("prepared directory = " + directory)
+    print("prepared directory = " + directory)
 
     # Exits if invalid subreddit name
     if not verifySubreddit(subreddit):
@@ -328,7 +328,8 @@ def main():
             continue
         
         # Skip post if not HD
-        elif not isHD(post, args.minimal_width, args.minimal_height):
+        elif not isHD(post, args.minimal_width, args.minimal_
+        height):
             print(RED + '{}) Skipping low resolution image'.format(index) + NC)
             index += 1
             continue
