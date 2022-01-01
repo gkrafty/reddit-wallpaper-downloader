@@ -103,25 +103,44 @@ def isHD(URL, min_width, min_height):
     return False
 
 # Returns false if image from URL is not landscape
-def isLandscape(URL):
+def isOriented(URL,required_orientation):
     file = urllib.request.urlopen(URL)
     size = file.headers.get("content-length")
     if size: size = int(size)
     p = ImageFile.Parser()
-    while 1:
-        data = file.read(1024)
-        if not data:
-            break
-        p.feed(data)
-        if p.image:
-            # return p.image.size
-            if p.image.size[0] >= p.image.size[1]:
-                return True
+
+    if required_orientation == 'landscape':
+        while 1:
+            data = file.read(1024)
+            if not data:
                 break
-            else:
-                return False
+            p.feed(data)
+            if p.image:
+                # return p.image.size
+                if p.image.size[0] >= p.image.size[1]:
+                    return True
+                    break
+                else:
+                    return False
+                    break
+        file.close()
+    elif required_orientation == 'portrait':
+        while 1:
+            data = file.read(1024)
+            if not data:
                 break
-    file.close()
+            p.feed(data)
+            if p.image:
+                # return p.image.size
+                if p.image.size[1] >= p.image.size[0]:
+                    return True
+                    break
+                else:
+                    return False
+                    break
+        file.close()
+    else:
+        return True
     return False
 
 # Returns true if image from URL is already downloaded
@@ -248,6 +267,12 @@ def main():
                         metavar = ('time'),
                         help = "Time bound the query \
                         default = all.  Optional values = hour, day, week, month, year")
+    
+    parser.add_argument("-o", "--orientation", type = str, nargs = '?',
+                        default = 'any',
+                        metavar = ('orientation'),
+                        help = "Select orientation of the image \
+                        default = any.  Optional values = portrait, landscape")
   
     # parse the arguments from standard input
     args = parser.parse_args()
@@ -324,8 +349,8 @@ def main():
             continue
 
         # Skip post if not landscape
-        elif not isLandscape(post):
-            print(RED + '{}) Skipping portrait image'.format(index) + NC)
+        elif not isOriented(post,required_orientation):
+            print(RED + '{}) Skipping wrong orientation'.format(index) + NC)
             index += 1
             continue
         
